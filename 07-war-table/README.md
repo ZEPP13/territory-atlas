@@ -18,7 +18,7 @@ read-only (no logging).
   elsewhere, duplicate) with a required reason. Nothing is deleted; **Reinstate** reverses it.
 - **Briefing** tours new arrivals, or the specification window when nothing is new.
 - **Method** (or click the rank plate) explains every layer, number, rule and input hash.
-- **Present** hides all editing controls for showing the tool to someone.
+- **Present** enlarges reading text, hides editing controls, and opens **Method** for inspection.
 - Keys: `B` briefing · `D` drift · `R` reset view · `M` method · `P` present · `Esc` close ·
   arrows pan · `+`/`-` zoom · `Q`/`E` rotate · `W`/`S` tilt.
 
@@ -35,7 +35,7 @@ read-only (no logging).
 | `build.py` | the one command; writes `dist/manifest.json` with input hashes and test results |
 | `dashboard_template.html` | the Admiralty Chart page |
 | `schemas/`, `config/` | contracts and every tunable number |
-| `tests/` | 51 tests: validator, ledger, progression, signals, real registry, server |
+| `tests/` | 58 tests: validator, ledger, progression, signals, real registry, server |
 
 ## Known limits
 - three.js and fonts load from CDNs. For a monitor that must work offline, vendor them.
@@ -43,3 +43,20 @@ read-only (no logging).
   horizon says so on screen. Web, trade-press and enterprise adapters are Phase B.
 - A facility added through `add_entity` appears after the next build, not live.
 - Close-zoom sharpness is limited by the single 4096 px chart texture.
+
+## Visual refinement — September 2026
+
+The overview now fits to the space left of the horizon panel. **Fold / Expand** on the
+horizon changes the panel to a summary and refits the chart. Reset restores the overview.
+Project snapshot date is shown separately from the local logging connection.
+
+Project markers use small outlined squares for construction/commissioning and circles for
+early stages; both are visible at overview zoom. Clusters combine markers of the same type.
+Ordinary snapshot markers stay still; fresh signals and the selected location retain emphasis.
+Industry colours retain the existing palette; **Facility colours · industry key** explains them.
+Region labels are shorter, can wrap, and avoid panels, other labels, and project symbols.
+Facility-card body text is larger and its scroll area stops above the control strip.
+
+Validation: 58 Python tests and Node syntax check; browser inspection on an isolated data copy.
+No registry decisions, signal records, engagement records, or scoring rules changed.
+Dashboard-template and palette hashes are now included in the build manifest.

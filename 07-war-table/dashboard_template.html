@@ -10,8 +10,8 @@
   --f-cond:"IBM Plex Sans Condensed",ui-sans-serif,system-ui,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --bg:radial-gradient(120% 90% at 50% 30%,#F2EAD7 0%,#E2D5B8 55%,#CDBE9C 100%);
-  --ink:#35291C; --muted:#7B6A50; --plate:rgba(244,237,221,.93); --plateSolid:#F4EDDD; --plateLine:rgba(53,41,28,.28);
-  --accent:#7A2E2E; --quest:#B3261E; --watch:#8E6F2A; --brass:#9A7A3A; --sea:#3A6874; --ok:#3F6B4E;
+  --ink:#35291C; --muted:#675A46; --plate:rgba(244,237,221,.93); --plateSolid:#F4EDDD; --plateLine:rgba(53,41,28,.28);
+  --accent:#7A2E2E; --quest:#985345; --watch:#826522; --brass:#9A7A3A; --sea:#3A6874; --ok:#3F6B4E;
   --region:#4E2A1F; --waterLbl:#3A6874; --cityLbl:#3B3023;
   --shadow:0 6px 22px -10px rgba(53,41,28,.45);
   --lblShadow:0 0 3px #F3EBD8,0 0 7px #F3EBD8,0 0 1px #F3EBD8;
@@ -26,29 +26,29 @@ button{font:inherit;color:inherit}
 #labels,#glyphs{position:fixed;inset:0;pointer-events:none;overflow:hidden}
 .lbl{position:absolute;left:0;top:0;white-space:nowrap;will-change:transform,opacity;text-shadow:var(--lblShadow)}
 .lbl>span{display:block;transform:translate(-50%,-50%)}
-.lbl.region span{font-family:var(--f-serif);font-weight:700;letter-spacing:.34em;text-transform:uppercase;font-size:14px;color:var(--region)}
-.lbl.water span{font-family:var(--f-serif);font-style:italic;font-weight:600;letter-spacing:.16em;font-size:16px;color:var(--waterLbl)}
-.lbl.water.big span{font-size:21px;letter-spacing:.3em}
-.lbl.city span{font-family:var(--f-cond);font-size:11.5px;font-weight:500;letter-spacing:.07em;color:var(--cityLbl)}
+.lbl.region span{font-family:var(--f-serif);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:13px;color:var(--region);white-space:normal;max-width:170px;width:max-content;text-align:center;line-height:1.25}
+.lbl.water span{font-family:var(--f-serif);font-style:italic;font-weight:600;letter-spacing:.08em;font-size:16px;color:var(--waterLbl)}
+.lbl.water.big span{font-size:20px;letter-spacing:.14em}
+.lbl.city span{font-family:var(--f-cond);font-size:13px;font-weight:500;letter-spacing:.03em;color:var(--cityLbl)}
 .lbl.city span::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;margin-right:5px;vertical-align:1px}
-.lbl.mtn span{font-family:var(--f-serif);font-weight:700;font-style:italic;letter-spacing:.5em;font-size:15px;color:var(--region);text-transform:uppercase}
+.lbl.mtn span{font-family:var(--f-serif);font-weight:700;font-style:italic;letter-spacing:.22em;font-size:14px;color:var(--region);text-transform:uppercase}
 
 /* project markers */
 .glyph{position:absolute;left:0;top:0;will-change:transform,opacity;transition:opacity .4s}
 .gw{position:absolute;left:-13px;bottom:0;width:26px;display:flex;justify-content:center;pointer-events:auto;cursor:pointer}
-.g{display:grid;place-items:center;font-weight:700;animation:bob 2.6s ease-in-out infinite;
-  width:21px;height:21px;border-radius:50%;background:var(--c);color:#FBF6EA;font-family:var(--f-serif);font-size:16px;line-height:1;
-  box-shadow:0 0 0 2px #F3EBD8,0 0 0 3.2px var(--c),0 3px 6px rgba(53,41,28,.35)}
-.glyph.w .g{--c:var(--watch);width:16px;height:16px;font-size:12px} .glyph.a .g{--c:var(--quest)}
-.glyph.fresh .g{box-shadow:0 0 0 2px #F3EBD8,0 0 0 3.2px var(--c),0 0 16px 4px var(--c)}
+.g{display:grid;place-items:center;font-weight:600;
+  width:16px;height:16px;border-radius:50%;background:var(--plateSolid);color:var(--c);font-family:var(--f-mono);font-size:11px;line-height:1;
+  border:1.5px solid var(--c);box-shadow:0 0 0 2px rgba(243,235,216,.85)}
+.glyph.w .g{--c:var(--watch)} .glyph.a .g{--c:var(--quest);border-radius:3px}
+.glyph.fresh .g{background:var(--c);color:#FBF6EA;box-shadow:0 0 0 2px #F3EBD8,0 0 12px 2px var(--c);animation:bob 3.8s ease-in-out infinite}
 .glyph.pinned .gw::after{content:"";position:absolute;top:-4px;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:var(--brass);box-shadow:0 0 0 1.5px #F3EBD8}
 .cnt{position:absolute;right:-9px;top:-7px;min-width:15px;height:15px;padding:0 3px;box-sizing:border-box;border-radius:8px;
   font-style:normal;font-family:var(--f-mono);font-size:9.5px;font-weight:600;line-height:15px;text-align:center;
   background:var(--ink);color:var(--plateSolid);display:none;z-index:2}
 .glyph.lead .cnt{display:block}
 body.focus .glyph:not(.sel){opacity:.2}
-.glyph.sel{z-index:5} .glyph.sel .g{scale:1.3;filter:drop-shadow(0 0 6px var(--c))}
-@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -4px}}
+.glyph.sel{z-index:5} .glyph.sel .g{scale:1.2;background:var(--c);color:#FBF6EA;filter:drop-shadow(0 0 4px var(--c))}
+@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -2px}}
 @media (prefers-reduced-motion:reduce){.g{animation:none}.ticker-track{animation:none!important}}
 body.capture .g{animation:none} body.capture #veil{transition:none}
 
@@ -58,8 +58,8 @@ body.capture .g{animation:none} body.capture #veil{transition:none}
 body.night #hud{opacity:.82}
 .plate{position:absolute;background:var(--plate);border:1px solid var(--plateLine);box-shadow:var(--shadow);
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-.eyebrow{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-#title{left:18px;top:16px;padding:12px 18px 12px;min-width:300px}
+.eyebrow{font-family:var(--f-mono);font-size:10px;letter-spacing:.10em;text-transform:uppercase;color:var(--muted)}
+#title{left:18px;top:16px;padding:12px 16px;min-width:288px}
 #title h1{margin:0;font-family:var(--f-serif);font-weight:700;font-size:30px;line-height:1;letter-spacing:.04em}
 #title .sub{margin-top:5px}
 #rank{margin-top:11px;padding-top:10px;border-top:1px solid var(--plateLine);cursor:pointer;background:none;border-left:0;border-right:0;border-bottom:0;width:100%;text-align:left;padding-left:0;padding-right:0}
@@ -75,31 +75,31 @@ body.night #hud{opacity:.82}
 .tl.a i{background:var(--quest)} .tl.w i{background:var(--watch)} .tl.c i{background:var(--sea)}
 .tl b{font-family:var(--f-mono);font-size:19px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
 .tl span{font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);line-height:1.25}
-#conn{right:18px;top:74px;padding:5px 10px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;display:flex;gap:7px;align-items:center}
+#conn{right:18px;top:78px;padding:6px 10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.02em;display:flex;gap:7px;align-items:center}
 #conn i{width:7px;height:7px;border-radius:50%;background:var(--muted)} #conn.live i{background:var(--ok);box-shadow:0 0 6px var(--ok)}
-#horizon{right:18px;top:106px;width:300px;padding:12px 14px;max-height:calc(100vh - 290px);overflow:auto}
+#horizon{right:18px;top:118px;width:320px;padding:14px 16px;box-sizing:border-box;max-height:calc(100vh - 265px);overflow:auto;scrollbar-gutter:stable}
 #horizon h2,.panelh{margin:0 0 8px;font-family:var(--f-serif);font-size:19px;font-weight:700;letter-spacing:.02em}
-.hz-row{display:grid;grid-template-columns:14px 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:13px}
+.hz-row{display:grid;grid-template-columns:14px 1fr auto;gap:8px;align-items:center;padding:5px 0;font-size:14px}
 .hz-row i{width:10px;height:10px;border-radius:50%} .hz-row b{font-family:var(--f-mono);font-size:12px}
-.hz-note{font-size:11.5px;color:var(--muted);margin:6px 0 10px;line-height:1.4}
+.hz-note{font-size:13px;color:var(--muted);margin:6px 0 10px;line-height:1.4}
 .hz-item{display:block;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--plateLine);padding:7px 0;cursor:pointer}
 .hz-item:hover b{color:var(--accent)}
-.hz-item b{display:block;font-size:13px;font-weight:600;line-height:1.25}
-.hz-item span{font-family:var(--f-mono);font-size:9.5px;color:var(--muted);letter-spacing:.04em}
+.hz-item b{display:block;font-size:15px;font-weight:600;line-height:1.25}
+.hz-item span{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em}
 body.carding #horizon{display:none}
-#card{right:18px;top:106px;width:370px;padding:16px 18px 14px;display:none;max-height:calc(100vh - 250px);overflow:auto}
+#card{right:18px;top:118px;width:410px;padding:16px 18px;box-sizing:border-box;display:none;max-height:calc(100vh - 265px);overflow:auto;scrollbar-gutter:stable}
 #card .kick{font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--quest);font-weight:600}
 #card .kick.w{color:var(--watch)} #card .kick.f{color:var(--muted)}
 #card h3{margin:6px 0 3px;font-family:var(--f-serif);font-size:25px;line-height:1.08;font-weight:700}
-#card .ind{font-size:13px;color:var(--muted);margin-bottom:10px}
-#card dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:10px 0;font-size:13px}
+#card .ind{font-size:14px;color:var(--muted);margin-bottom:10px}
+#card dl{display:grid;grid-template-columns:auto 1fr;gap:7px 12px;margin:14px 0;font-size:15px}
 #card dt{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:3px}
 #card dd{margin:0}
 #card .x{position:absolute;right:8px;top:6px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
 #card .prog{height:2px;background:var(--plateLine);margin:-2px -18px 12px;overflow:hidden}
 #card .prog i{display:block;height:100%;width:0;background:var(--accent)}
 .sec{border-top:1px solid var(--plateLine);margin-top:11px;padding-top:9px}
-.sec p{margin:3px 0;font-size:12.5px;line-height:1.45}
+.sec p{margin:5px 0;font-size:15px;line-height:1.5}
 .pips{display:flex;gap:4px;margin:8px 0 2px}
 .pip{flex:1;text-align:center}
 .pip i{display:block;height:6px;border-radius:3px;background:rgba(53,41,28,.12)}
@@ -107,7 +107,7 @@ body.carding #horizon{display:none}
 .pip span{display:block;font-family:var(--f-mono);font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:3px}
 .pip.cur span{color:var(--ink);font-weight:600}
 .taps{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:8px}
-.tap{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:8px 2px;cursor:pointer;
+.tap{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.02em;text-transform:uppercase;padding:10px 2px;cursor:pointer;
   background:var(--plateSolid);border:1px solid var(--plateLine);border-radius:2px}
 .tap:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
 .tap.done{background:rgba(154,122,58,.16);border-color:var(--brass)}
@@ -117,8 +117,8 @@ body.carding #horizon{display:none}
 .roleform input,.recform textarea,.recform select{flex:1;font:inherit;font-size:12.5px;padding:6px 8px;border:1px solid var(--plateLine);background:#FBF7EE;color:var(--ink);border-radius:2px}
 .sig{border-left:3px solid var(--watch);padding:4px 0 6px 9px;margin:6px 0}
 .sig.a{border-left-color:var(--quest)}
-.sig b{font-size:12.5px;display:block;line-height:1.3}
-.sig small{display:block;font-family:var(--f-mono);font-size:9.5px;color:var(--muted);letter-spacing:.03em;margin-top:2px}
+.sig b{font-size:14px;display:block;line-height:1.3}
+.sig small{display:block;font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.03em;margin-top:2px}
 .tag{display:inline-block;font-family:var(--f-mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;padding:1px 5px;border:1px solid var(--plateLine);border-radius:2px;margin-right:4px}
 .tag.ai{border-color:var(--accent);color:var(--accent)} .tag.spec{border-color:var(--brass);color:var(--brass)}
 .sigbtns{display:flex;gap:10px;margin-top:4px}
@@ -126,18 +126,18 @@ body.carding #horizon{display:none}
 .recform .row{display:flex;gap:6px;margin-top:6px}
 .btn{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:var(--plateSolid);border:1px solid var(--plateLine);padding:7px 10px;border-radius:2px}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#FBF6EA}
-.src{font-family:var(--f-mono);font-size:9.5px;line-height:1.5;color:var(--muted)}
+.src{font-family:var(--f-mono);font-size:11px;line-height:1.5;color:var(--muted)}
 .err{color:var(--quest);font-family:var(--f-mono);font-size:10px;margin-top:5px}
 body.present .edit{display:none!important}
 
-#legend{left:18px;bottom:62px;padding:9px 13px;font-family:var(--f-mono);font-size:10px;letter-spacing:.03em}
+#legend{left:18px;bottom:62px;padding:10px 13px;font-family:var(--f-cond);font-size:13px;letter-spacing:.01em;max-height:calc(100vh - 265px);overflow:auto;box-sizing:border-box;width:310px}
 #legend div{display:flex;align-items:center;gap:8px;margin:3px 0}
 #legend em{font-style:normal;width:16px;display:flex;justify-content:center}
 #legend .pencil{width:16px;height:9px;background:repeating-linear-gradient(135deg,#bdb3a1 0 2px,#e9e2d3 2px 4px);border:1px solid var(--plateLine)}
 #scale{margin-top:7px;display:flex;align-items:center;gap:8px}
 #scale i{display:block;height:6px;border:1.5px solid var(--ink);border-top:0}
 #ctrl{right:18px;bottom:62px;padding:8px;display:flex;gap:6px;align-items:center}
-.cbtn{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;background:none;border:1px solid var(--plateLine);padding:8px 11px;border-radius:2px}
+.cbtn{font-family:var(--f-mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;background:none;border:1px solid var(--plateLine);padding:10px 10px;border-radius:2px}
 .cbtn:hover{border-color:var(--accent);color:var(--accent)}
 .cbtn.hot{background:var(--accent);border-color:var(--accent);color:#FBF6EA}
 #compass{width:46px;height:46px;margin-left:4px;color:var(--ink)}
@@ -178,6 +178,23 @@ body.night{--bg:radial-gradient(120% 90% at 50% 30%,#A2977F 0%,#8C826D 55%,#776D
 body.present{--hudScale:1.12}
 body.present #title h1{font-size:34px}
 body.present .plate{font-size:calc(100% * var(--hudScale))}
+.hz-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.hz-head h2{margin:0!important;font-size:22px!important}
+.hz-toggle{background:none;border:1px solid var(--plateLine);padding:5px 7px;font-size:12px;cursor:pointer;white-space:nowrap}
+.hz-date{font-family:var(--f-mono);font-size:10.5px;line-height:1.5;color:var(--sea);margin:8px 0}
+#horizon.compact .hz-list,#horizon.compact .hz-extra,#horizon.compact .hz-note{display:none}
+#horizon.compact .hz-date{margin-bottom:0}
+#legend summary{cursor:pointer;font-weight:600;padding:3px 0}
+#industry-key{display:grid!important;grid-template-columns:1fr 1fr;gap:7px 10px!important;margin:8px 0!important}
+#industry-key .industry{display:flex;align-items:center;gap:6px;font-size:12px;line-height:1.2}
+#industry-key i{width:9px;height:9px;border:1px solid rgba(53,41,28,.25);border-radius:50%;flex:none}
+#legend .legend-symbol{width:13px;height:13px;box-sizing:border-box;border:1.5px solid currentColor;border-radius:50%;font:10px var(--f-mono);align-items:center}
+#legend .legend-symbol.active{border-radius:3px}
+body.present .hz-item b,body.present #card dl,body.present .sec p{font-size:17px}
+body.present .hz-note,body.present .hz-row,body.present #legend{font-size:15px}
+body.present .hz-item span,body.present .hz-date,body.present .sig small{font-size:12px}
+@media(max-width:1050px){#horizon{width:290px}#card{width:360px}#title{min-width:250px}#title h1{font-size:27px}}
+@media(max-width:740px){#title{min-width:0;width:calc(100% - 36px);box-sizing:border-box}#tally{display:none}#conn{top:auto;bottom:116px}#horizon,#card{top:170px;width:calc(100% - 36px);max-height:calc(100vh - 325px)}#legend{display:none}#ctrl{left:18px;right:18px;justify-content:center;gap:3px}#compass{display:none}.cbtn{padding:8px 7px}}
 </style>
 
 <canvas id="gl" aria-label="Three-dimensional chart of the Eastern Virginia sales territory. Drag to pan, right-drag or shift-drag to rotate and tilt, scroll to zoom."></canvas>
@@ -203,11 +220,12 @@ body.present .plate{font-size:calc(100% * var(--hudScale))}
   <div class="plate" id="horizon"></div>
   <div class="plate" id="card" role="dialog" aria-live="polite"></div>
   <div class="plate" id="legend">
-    <div><em style="color:var(--quest)">&#9679;</em>! under construction or expanding</div>
-    <div><em style="color:var(--watch)">&#9679;</em>? announced: specification window open</div>
-    <div><em>&middot;</em>facility &middot; colour = industry &middot; size = opportunity</div>
-    <div><em style="opacity:.45">&middot;</em>low-opportunity facilities appear as you zoom in</div>
-    <div><em><span class="pencil"></span></em>pencil = not yet surveyed &middot; inks in as you chart</div>
+    <div><em class="legend-symbol active" style="color:var(--quest)">!</em>Construction / commissioning</div>
+    <div><em class="legend-symbol" style="color:var(--watch)">?</em>Early project · see card for stage</div>
+    <details id="industry-legend"><summary>Facility colours · industry key</summary><div id="industry-key"></div></details>
+    <div><em>&middot;</em>Facility size = opportunity</div>
+    <div><em style="opacity:.45">&middot;</em>Low opportunity appears as you zoom</div>
+    <div><em><span class="pencil"></span></em>Pencil chart inks in as you survey</div>
     <div id="scale"><i id="scale-bar" style="width:80px"></i><span id="scale-t">10 mi</span></div>
   </div>
   <div class="plate" id="ctrl">
@@ -260,8 +278,8 @@ const ST={
   terr:"#7A2E2E", terrW:5, terrIn:"rgba(122,46,46,.14)", terrInW:26, vignette:"rgba(205,190,156,.55)",
   grat:"rgba(58,100,112,.22)",
   fog:"#E3D8BF", fogK:[1.05,3.2],
-  quest:"#B3261E", watch:"#8E6F2A", ringEdge:"#F3EBD8", inkEdge:"#35291C", brassEdge:"#9A7A3A", dotA:.9,
-  ping:"#3F7482", pingSpeed:70, glyphLift:10, watchGain:.8,
+  quest:"#985345", watch:"#826522", ringEdge:"#F3EBD8", inkEdge:"#35291C", brassEdge:"#9A7A3A", dotA:.9,
+  ping:"#3F7482", pingSpeed:70, glyphLift:5, watchGain:.8,
   uncharted:CHARTCFG.uncharted_strength??.72, inkFullAt:CHARTCFG.ink_full_at_share??.5,
   lowStart:CHARTCFG.low_fade_in_start??.55, lowFull:CHARTCFG.low_fade_in_full??.35
 };
@@ -462,7 +480,7 @@ function bake(){
 const FAMBY={}; DB.families.forEach(f=>FAMBY[f.id]=f);
 const PROF=f=>DB.profiles[f]||DB.profiles["other-mfg"];
 const resolveTxt=(t,f)=>String(t||"").replace("@why",PROF(f).why).replace("@note",PROF(f).scale_note);
-const POTSIZE={"High":10.5,"Medium":8,"Low":6,"Insufficient information":5};
+const POTSIZE={"High":9,"Medium":6.5,"Low":5.5,"Insufficient information":5};
 const POTRANK={"High":3,"Medium":2,"Low":1,"Insufficient information":0};
 const PCFG=DB.config.progression, SCFG=DB.config.signals;
 const STAGES=PCFG.stages.map(s=>s.id), STAGE_LABEL=Object.fromEntries(PCFG.stages.map(s=>[s.id,s.label]));
@@ -609,14 +627,16 @@ function ringLayer(list,base,speed){
         float sp=speed*(1.+vF);
         float t1=fract(time*sp+vP), t2=fract(time*sp+vP+.5);
         float a=smoothstep(.07,0.,abs(r-t1))*(1.-t1)+smoothstep(.06,0.,abs(r-t2))*(1.-t2)*.55;
-        a+=smoothstep(.2,.13,r)*.9;
+        // Established snapshot markers stay still. Only fresh signals animate.
+        a=mix(smoothstep(.045,0.,abs(r-.30))*.24,a,step(.001,vF));
         a*=gain*vDim*(1.+vF*.8); if(a<.01) discard; gl_FragColor=vec4(color,clamp(a,0.,1.)); }`});
   const pts=new THREE.Points(g,m); pts.renderOrder=3; scene.add(pts);
   return {list,g,u,m,pts};
 }
-const RA=ringLayer(ACTIVE,96,.55), RW=ringLayer(WATCH,58,.28);
+const RA=ringLayer(ACTIVE,66,.42), RW=ringLayer(WATCH,58,.28);
 RA.u.color.value=col3(ST.quest); RW.u.color.value=col3(ST.watch); RW.u.gain.value=ST.watchGain;
 const SELR={list:[SITES[0]]}; Object.assign(SELR,ringLayer(SELR.list,190,.8));
+SELR.g.attributes.afresh.array[0]=1; SELR.g.attributes.afresh.needsUpdate=true;
 SELR.pts.renderOrder=6; SELR.pts.visible=false; SELR.m.depthTest=false; SELR.u.fon={value:0};
 
 function placeGeometry(){
@@ -635,6 +655,7 @@ function placeGeometry(){
 }
 
 /* ================================ DOM layers ================================ */
+const REGION_LABELS={C1:"Richmond",C2:"Tri-Cities",C3:"Fredericksburg / I-95",C4:"Northern Virginia",C5:"Northern Neck & Middle Peninsula",C6:"Virginia Peninsula",C7:"Southside Hampton Roads",C8:"Western Tidewater",C9:"Southside",C10:"Eastern Shore",C11:"Central Piedmont",C12:"Northern Piedmont"};
 const LBL=[]; let LBL_ORDER=[];
 function label(kind,text,x,y,extra){
   const el=document.createElement("div"); el.className="lbl "+kind+(extra?" "+extra:"");
@@ -651,7 +672,7 @@ function buildLabels(){
     let sx=0,sy=0; best.forEach(p=>{sx+=p[0];sy+=p[1];}); cent[j.n]=[sx/best.length,sy/best.length];});
   Object.entries(DB.clusters).forEach(([id,c])=>{
     const pts=c.j.map(n=>cent[n]).filter(Boolean); if(!pts.length)return;
-    label("region",c.name,pts.reduce((s,p)=>s+p[0],0)/pts.length,pts.reduce((s,p)=>s+p[1],0)/pts.length);});
+    label("region",REGION_LABELS[id]||c.name,pts.reduce((s,p)=>s+p[0],0)/pts.length,pts.reduce((s,p)=>s+p[1],0)/pts.length);});
   [["Chesapeake Bay",37.62,-76.13,"big"],["Atlantic Ocean",37.05,-75.45,"big"],["James River",37.21,-76.80],
    ["York River",37.34,-76.60],["Rappahannock River",37.83,-76.64],["Potomac River",38.24,-76.98],
    ["Hampton Roads",36.975,-76.33],["Lake Anna",38.07,-77.85],["Kerr Lake",36.64,-78.36]]
@@ -689,7 +710,9 @@ function fitView(pitch,yaw){
   if(!OUTLINE){OUTLINE=[];DB.geo.boundary.forEach(b=>{const p=decode(b);
     for(let i=0;i<p.length;i+=Math.max(1,Math.floor(p.length/400)))OUTLINE.push(new THREE.Vector3(sX(p[i][0]),0,sZ(p[i][1])));});}
   const W=innerWidth,H=innerHeight;
-  const safe=[24, 96, W-24, H-(W<760?150:128)];
+  const panel=$("horizon").getBoundingClientRect(), title=$("title").getBoundingClientRect();
+  const compact=$("horizon").classList.contains("compact");
+  const safe=W>740?[28,compact?Math.max(title.bottom+16,panel.bottom+16):118,compact?W-28:panel.left-24,H-155]:[20,165,W-20,H-140];
   const sw=safe[2]-safe[0], sh=safe[3]-safe[1], scx=(safe[0]+safe[2])/2, scy=(safe[1]+safe[3])/2;
   FITCAM.fov=camera.fov; FITCAM.aspect=W/H; FITCAM.near=camera.near; FITCAM.far=camera.far; FITCAM.updateProjectionMatrix();
   let tx=FIT.tx, tz=FIT.tz, d=FIT.d;
@@ -725,6 +748,8 @@ function clampGoal(){
 function resize(){
   const w=innerWidth,h=innerHeight; renderer.setSize(w,h,false);
   camera.aspect=w/h; camera.updateProjectionMatrix();
+  if(OUTLINE&&!SEL)homeView();
+  LBL.forEach(l=>{l.w=0;});
 }
 addEventListener("resize",resize);
 
@@ -881,7 +906,7 @@ function renderTally(){
 function renderConn(){
   const c=$("conn"), p=document.body.classList.contains("present");
   c.classList.toggle("live",API.live);
-  $("conn-t").textContent=p?"Presentation":API.live?"Live · logging on":"Read-only snapshot";
+  $("conn-t").textContent=p?"Presentation":API.live?"Local logging connected":"Read-only · logging off";
 }
 const STAGE_TEXT={rumored:"Rumored",announced:"Announced · spec window",design:"Design · spec window",
   permitting:"Permitting · spec window",construction:"Under construction",commissioning:"Commissioning",
@@ -896,16 +921,18 @@ function renderHorizon(){
   const top=(arr,n)=>arr.filter(s=>s.entity_id).sort((a,b)=>b.fresh-a.fresh||oppRank(ENT[b.entity_id])-oppRank(ENT[a.entity_id])).slice(0,n);
   const item=s=>{const e=ENT[s.entity_id]; return `<button class="hz-item" type="button" data-id="${esc(s.entity_id)}">
     <b>${esc(e.name)}</b><span>${esc(e.jurisdiction)} · ${esc(e.potential?.band||"")} opportunity</span></button>`;};
-  $("horizon").innerHTML=`<h2>On the horizon</h2>
+  const compact=$("horizon").classList.contains("compact");
+  $("horizon").innerHTML=`<div class="hz-head"><h2>On the horizon</h2><button class="hz-toggle" type="button" id="horizon-toggle" aria-expanded="${!compact}" aria-controls="horizon-list">${compact?"Expand":"Fold"}</button></div>
+    <p class="hz-date">${onlySnap?`Project snapshot · ${esc(SCFG.registry_snapshot.as_of)}`:"Project sources · dates on each signal"}</p>
     <div class="hz-row"><i style="background:var(--watch)"></i>Specification window<b>${spec.length}</b></div>
     <div class="hz-row"><i style="background:var(--quest)"></i>Under construction<b>${cons.length}</b></div>
-    <div class="hz-row"><i style="background:var(--muted)"></i>On hold<b>${hold}</b></div>
-    <div class="hz-row"><i style="border:1.5px dashed var(--muted);box-sizing:border-box"></i>Unplaced signals<b>${unplaced}</b></div>
+    <div class="hz-row hz-extra"><i style="background:var(--muted)"></i>On hold<b>${hold}</b></div>
+    <div class="hz-row hz-extra"><i style="border:1.5px dashed var(--muted);box-sizing:border-box"></i>Unplaced signals<b>${unplaced}</b></div>
     <p class="hz-note">${fresh?`<b>${fresh} new</b> in the last week. `:onlySnap
       ?`No new arrivals yet: every signal is the Industrial Info snapshot of ${esc(SCFG.registry_snapshot.as_of)}. `
       :"No new arrivals in the last week. "}Meters are specified before construction starts, so the window is where to be early.</p>
-    <div class="eyebrow">Spec window · highest opportunity</div>${top(spec,5).map(item).join("")}
-    <div class="eyebrow" style="margin-top:10px">Under construction</div>${top(cons,3).map(item).join("")}`;
+    <div class="hz-list" id="horizon-list"><div class="eyebrow">Spec window · highest opportunity</div>${top(spec,5).map(item).join("")}
+    <div class="eyebrow" style="margin-top:10px">Under construction</div>${top(cons,3).map(item).join("")}</div>`;
 }
 const VERB={surveyed:"Surveyed",visited:"Landfall · visited",met:"Landfall · met",quoted:"Established · quoted",
   won:"Anchored · won",signal_reviewed:"Reviewed",signal_pinned:"Pinned",signal_dismissed:"Dismissed"};
@@ -1066,7 +1093,7 @@ function runBriefing(){
 }
 function toggleDrift(on){ drift=on??!drift; driftBase=goal.yaw; $("drift").classList.toggle("hot",drift); }
 function togglePresent(on){ const b=document.body; on=on??!b.classList.contains("present");
-  b.classList.toggle("present",on); $("present").classList.toggle("hot",on); renderConn(); if(SEL)renderCard(SEL,CARDOPT); LBL.forEach(l=>{l.w=0;}); }
+  b.classList.toggle("present",on); $("present").classList.toggle("hot",on); renderConn(); if(SEL)renderCard(SEL,CARDOPT); LBL.forEach(l=>{l.w=0;}); if(!SEL)homeView(); if(on)toggleMethod(true); }
 
 /* ================================== method ================================== */
 function renderMethod(){
@@ -1169,33 +1196,17 @@ function updateScale(){
 }
 function placeDOM(){
   const W=innerWidth,H=innerHeight;
-  const boxes=[];
-  for(const l of LBL_ORDER){
-    v3.set(sX(l.x),l.h||0,sZ(l.y)).project(camera);
-    let op=1;
-    if(v3.z>1||v3.x<-1.1||v3.x>1.1||v3.y<-1.1||v3.y>1.1)op=0;
-    else if(l.kind==="region")op=sstep(.34,.55,cam.d/FITD);
-    else if(l.kind==="city")op=1-sstep(.62,.9,cam.d/FITD);
-    else if(l.kind==="water")op=l.big?1:1-sstep(1.25,1.6,cam.d/FITD);
-    const sx=(v3.x+1)/2*W, sy=(1-v3.y)/2*H;
-    if(op>.02){
-      if(!l.w){const r=l.el.firstChild.getBoundingClientRect(); l.w=r.width||l.text.length*8; l.h2=r.height||16;}
-      const b=[sx-l.w/2-6,sy-l.h2/2-3,sx+l.w/2+6,sy+l.h2/2+3];
-      if(boxes.some(o=>b[0]<o[2]&&b[2]>o[0]&&b[1]<o[3]&&b[3]>o[1]))op=0; else boxes.push(b);
-    }
-    l.el.style.opacity=op.toFixed(2);
-    if(op>0)l.el.style.transform=`translate3d(${sx.toFixed(1)}px,${sy.toFixed(1)}px,0)`;
-  }
   const gs=clamp(900/cam.d,.75,1.35), R=26*gs, leads=[];
   const lift=ST.glyphLift*clamp(cam.d/FITD*2.2,.25,1);
   for(const g of GLY_ORDER){
     v3.set(sX(g.s.x),g.s.h+lift*(g.cls==="w"?.55:1),sZ(g.s.y)).project(camera);
     const inView=g.s.mk&&!(v3.z>1||Math.abs(v3.x)>1.05||Math.abs(v3.y)>1.05);
-    const zoomHide=g.cls==="w"&&cam.d>FITD*.55;
+    const zoomHide=false; // Both early and active project stages deserve an overview marker.
     const sx=(v3.x+1)/2*W, sy=(1-v3.y)/2*H;
     g.merged=false; g.n=1; g.members=[g.s];
     if(inView&&!zoomHide){
-      const hit=leads.find(o=>Math.abs(o.sx-sx)<R&&Math.abs(o.sy-sy)<R*1.15);
+      const important=SEL===g.s||g.s.sig?.fresh>0||g.s.sig?.triage==="pinned";
+      const hit=!important&&leads.find(o=>o.g.cls===g.cls&&Math.abs(o.sx-sx)<R&&Math.abs(o.sy-sy)<R*1.15);
       if(hit){ hit.g.members.push(g.s); if(hit.g.cls===g.cls)hit.g.n++; g.merged=true; }
       else leads.push({g,sx,sy});
     }
@@ -1212,6 +1223,27 @@ function placeDOM(){
     if(g.n>1&&g.cnt.textContent!==String(g.n))g.cnt.textContent=g.n;
     g.el.style.transform=`translate3d(${g.sx.toFixed(1)}px,${g.sy.toFixed(1)}px,0) scale(${gs.toFixed(2)})`;
   }
+  const boxes=["title","tally","conn","horizon","card","legend","ctrl","log"].map(id=>$(id)).filter(el=>el.offsetWidth&&el.offsetHeight).map(el=>{const r=el.getBoundingClientRect();return [r.left-10,r.top-8,r.right+10,r.bottom+8];});
+  GLY.filter(g=>g.vis).forEach(g=>boxes.push([g.sx-9,g.sy-18,g.sx+12,g.sy+2]));
+  for(const l of LBL_ORDER){
+    v3.set(sX(l.x),l.h||0,sZ(l.y)).project(camera);
+    let op=1;
+    if(v3.z>1||v3.x<-1.1||v3.x>1.1||v3.y<-1.1||v3.y>1.1)op=0;
+    else if(l.kind==="region")op=sstep(.34,.55,cam.d/FITD);
+    else if(l.kind==="city")op=1-sstep(.62,.9,cam.d/FITD);
+    else if(l.kind==="water")op=l.big?1:1-sstep(1.25,1.6,cam.d/FITD);
+    let sx=(v3.x+1)/2*W, sy=(1-v3.y)/2*H;
+    if(op>.02){
+      if(!l.w){const r=l.el.firstChild.getBoundingClientRect(); l.w=r.width||l.text.length*8; l.h2=r.height||16;}
+      // A small offset can retain the name in its region without covering a facility.
+      const offsets=l.kind==="region"?[[0,0],[0,-22],[0,22],[-28,0],[28,0],[0,-42],[0,42],[-28,-22],[28,22]]:[[0,0],[0,-16],[0,16]];
+      const chosen=offsets.map(([dx,dy])=>({dx,dy,b:[sx+dx-l.w/2-5,sy+dy-l.h2/2-2,sx+dx+l.w/2+5,sy+dy+l.h2/2+2]})).find(({b})=>b[0]>=12&&b[2]<=W-12&&b[1]>=12&&b[3]<=H-48&&!boxes.some(o=>b[0]<o[2]&&b[2]>o[0]&&b[1]<o[3]&&b[3]>o[1]));
+      if(chosen){sx+=chosen.dx;sy+=chosen.dy;boxes.push(chosen.b);}else op=0;
+    }
+    l.el.style.opacity=op.toFixed(2);
+    if(op>0)l.el.style.transform=`translate3d(${sx.toFixed(1)}px,${sy.toFixed(1)}px,0)`;
+  }
+
 }
 
 /* ==================================== boot ==================================== */
@@ -1219,10 +1251,11 @@ async function boot(){
   resize();
   await Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]);
   await loadTerrain(); buildPaths(); buildContours(); buildLabels(); buildGlyphs();
+  $("industry-key").innerHTML=DB.families.filter(f=>SITES.some(s=>s.f===f.id)).map(f=>`<span class="industry"><i style="background:${esc(f.c)}"></i>${esc(f.label)}</span>`).join("");
   bake(); bakeCoverMask(); placeGeometry();
   U.fogColor.value=col3(ST.fog); U.pingSpeed.value=ST.pingSpeed;
   homeView(); Object.assign(cam,goal);
-  await connect(); applyState(true); updateAmbient();
+  await connect(); applyState(true); updateAmbient(); homeView(); Object.assign(cam,goal);
   $("rank").onclick=()=>{touch();toggleMethod(true);};
   $("brief").onclick=()=>{lastInput=performance.now(); runBriefing();};
   $("drift").onclick=()=>{touch();toggleDrift();};
@@ -1230,7 +1263,7 @@ async function boot(){
   $("methodbtn").onclick=()=>{touch();toggleMethod();};
   $("present").onclick=()=>{touch();togglePresent();};
   $("method").addEventListener("click",e=>{if(e.target.id==="method")toggleMethod(false);});
-  $("horizon").addEventListener("click",e=>{const b=e.target.closest("[data-id]"); if(b&&SITEBY[b.dataset.id]){touch();select(SITEBY[b.dataset.id]);}});
+  $("horizon").addEventListener("click",e=>{if(e.target.closest("#horizon-toggle")){touch();$("horizon").classList.toggle("compact");renderHorizon();homeView();return;}const b=e.target.closest("[data-id]"); if(b&&SITEBY[b.dataset.id]){touch();select(SITEBY[b.dataset.id]);}});
   if(API.live){ setInterval(refresh,120000);
     document.addEventListener("visibilitychange",()=>{if(!document.hidden)refresh();}); }
   if(HASH.includes("present"))togglePresent(true);

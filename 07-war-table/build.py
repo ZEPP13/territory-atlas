@@ -39,6 +39,7 @@ from potential import family_catalog, WEIGHTS, BANDS                   # noqa: E
 from palette import COLORS, ICONS                                      # noqa: E402
 
 INPUTS = [
+    "07-war-table/dashboard_template.html", "05-preview/palette.py",
     "02-data/registry/iir_sites.json", "02-data/registry/deq_sites.json", "02-data/registry/registry_sites.json",
     "02-data/registry/egrid_plants.json", "02-data/exclusions.json", "02-data/clusters.json",
     "02-data/model_config.json", "02-data/geo/basemap.json", "02-data/geo/terrain.png",
