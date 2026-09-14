@@ -1,0 +1,102 @@
+{
+  "_doc": "Charting progression. Every number the dashboard shows about rank and points comes from this file. See 00-framework/WAR-TABLE.md section 6.",
+  "version": "1.0",
+  "stages": [
+    {
+      "id": "uncharted",
+      "label": "Uncharted",
+      "points": 0
+    },
+    {
+      "id": "surveyed",
+      "label": "Surveyed",
+      "points": 1
+    },
+    {
+      "id": "landfall",
+      "label": "Landfall",
+      "points": 3
+    },
+    {
+      "id": "established",
+      "label": "Established",
+      "points": 5
+    },
+    {
+      "id": "anchored",
+      "label": "Anchored",
+      "points": 8
+    }
+  ],
+  "action_stage": {
+    "surveyed": "surveyed",
+    "visited": "landfall",
+    "met": "landfall",
+    "quoted": "established",
+    "won": "anchored"
+  },
+  "opportunity_weight": {
+    "High": 3,
+    "Medium": 2,
+    "Low": 1,
+    "Insufficient information": 1
+  },
+  "kind_weight": {
+    "oem": 3,
+    "engineering_office": 3,
+    "integrator": 2,
+    "distributor": 2
+  },
+  "cluster_milestones": [
+    {
+      "share": 0.1,
+      "points": 5
+    },
+    {
+      "share": 0.25,
+      "points": 15
+    },
+    {
+      "share": 0.5,
+      "points": 30
+    },
+    {
+      "share": 0.75,
+      "points": 50
+    }
+  ],
+  "signal_review": {
+    "within_days": 3,
+    "points": 1
+  },
+  "ranks": {
+    "names": [
+      "Chart Cadet",
+      "Surveyor",
+      "Senior Surveyor",
+      "Navigator",
+      "Master Navigator",
+      "Harbor Master",
+      "Commodore"
+    ],
+    "grades": [
+      "I",
+      "II",
+      "III"
+    ],
+    "final": "Admiral of the Chart",
+    "curve": {
+      "top_points": 5760,
+      "exponent": 2.1,
+      "round_to": 5
+    }
+  },
+  "chart": {
+    "_doc": "How the uncharted pencil look inks in. Visual only; no effect on points.",
+    "ink_full_at_share": 0.5,
+    "uncharted_strength": 0.9,
+    "_low": "Low-opportunity facilities fade in between these zoom levels (camera distance as a share of the fitted overview).",
+    "low_fade_in_start": 0.55,
+    "low_fade_in_full": 0.35
+  }
+}

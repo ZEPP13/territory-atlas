@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "war-table/ledger-change",
+  "title": "Registry change ledger record (02-data/ledger/registry_changes.jsonl, append-only)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "ts", "actor", "change", "entity_id", "reason"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^lc-[a-z0-9]{12}$"},
+    "ts": {"type": "string", "format": "date-time"},
+    "actor": {"type": "string", "pattern": "^(joe|system:[a-z0-9_-]+)$"},
+    "change": {"enum": ["mark_defunct", "mark_not_a_fit", "mark_assigned_elsewhere", "mark_duplicate", "reinstate", "correct", "add_entity"]},
+    "entity_id": {"type": "string", "minLength": 3, "maxLength": 80, "pattern": "^[A-Za-z0-9_.:-]+$"},
+    "reason": {"type": "string", "minLength": 3, "maxLength": 500},
+    "duplicate_of": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]+$"},
+    "field": {"enum": ["name", "lat", "lon", "subindustry", "parent"]},
+    "value": {"type": ["string", "number"]},
+    "entity": {"type": "object"},
+    "evidence": {"type": "string", "maxLength": 500}
+  }
+}

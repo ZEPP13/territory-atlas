@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "war-table/signal",
+  "title": "Signal (02-data/signals/signals.jsonl, append-only). Source-agnostic contract.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "received_at", "kind", "stage", "headline", "summary", "source", "entity_id", "match", "generated_by"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^sig-[A-Za-z0-9_.:-]+$", "maxLength": 120},
+    "received_at": {"type": "string", "format": "date-time"},
+    "published_at": {"type": ["string", "null"]},
+    "kind": {"enum": ["project_status", "project_announcement", "permit", "construction_start", "expansion", "closure", "contract_award", "leadership_change", "other"]},
+    "stage": {"enum": ["rumored", "announced", "design", "permitting", "construction", "commissioning", "operating", "on_hold", "cancelled", null]},
+    "headline": {"type": "string", "minLength": 3, "maxLength": 200},
+    "summary": {"type": "string", "maxLength": 600},
+    "url": {"type": ["string", "null"], "pattern": "^https://"},
+    "source": {"type": "object", "additionalProperties": false, "required": ["type", "name", "as_of"],
+      "properties": {
+        "type": {"enum": ["registry_snapshot", "public_web", "trade_press", "government_record", "enterprise_db", "manual"]},
+        "name": {"type": "string", "minLength": 2},
+        "as_of": {"type": "string"}}},
+    "entity_id": {"type": ["string", "null"]},
+    "match": {"type": "object", "additionalProperties": false, "required": ["method", "confidence", "reason"],
+      "properties": {
+        "method": {"enum": ["exact_id", "name_geo", "manual", "none"]},
+        "confidence": {"enum": ["high", "medium", "low", "none"]},
+        "reason": {"type": "string"}}},
+    "generated_by": {"type": "object", "additionalProperties": false, "required": ["kind", "detail"],
+      "properties": {
+        "kind": {"enum": ["human", "rule", "ai"]},
+        "detail": {"type": "string", "minLength": 3}}}
+  }
+}

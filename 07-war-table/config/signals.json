@@ -1,0 +1,11 @@
+{
+  "_doc": "Signal layer settings. See 00-framework/WAR-TABLE.md section 5.",
+  "version": "1.0",
+  "stage_order": ["rumored", "announced", "design", "permitting", "construction", "commissioning", "operating"],
+  "side_stages": ["on_hold", "cancelled"],
+  "spec_window": ["announced", "design", "permitting"],
+  "freshness": {"bright_hours": 72, "fade_days": 7},
+  "_freshness_note": "Only sources that represent something ARRIVING get a freshness glow. A registry snapshot is a statement about a file, not news, so it never glows.",
+  "fresh_source_types": ["public_web", "trade_press", "government_record", "enterprise_db", "manual"],
+  "registry_snapshot": {"name": "Industrial Info plant export", "as_of": "2026-09-09"}
+}

@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "war-table/entity",
+  "title": "Registry entity (effective registry record shipped to the dashboard)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "name", "lat", "lon", "jurisdiction", "cluster", "scope", "sources", "flags", "status"],
+  "properties": {
+    "id": {"type": "string", "minLength": 3, "maxLength": 80, "pattern": "^[A-Za-z0-9_.:-]+$"},
+    "kind": {"enum": ["facility", "oem", "engineering_office", "integrator", "distributor"]},
+    "name": {"type": "string", "minLength": 1, "maxLength": 200},
+    "parent": {"type": "string", "maxLength": 200},
+    "operator": {"type": "string", "maxLength": 200},
+    "lat": {"type": "number", "minimum": 36.0, "maximum": 39.6},
+    "lon": {"type": "number", "minimum": -79.6, "maximum": -74.8},
+    "jurisdiction": {"type": "string", "minLength": 1},
+    "cluster": {"type": "string", "pattern": "^C([1-9]|1[0-2])$"},
+    "band": {"type": "integer", "minimum": 1, "maximum": 4},
+    "miles": {"type": "number", "minimum": 0},
+    "scope": {"enum": ["core", "out_of_portfolio", "out_of_territory"]},
+    "family": {"type": "string"},
+    "sector": {"type": "string"},
+    "subindustry": {"type": "string"},
+    "note": {"type": "string"},
+    "existence": {"enum": ["registry", "recall", "ledger"]},
+    "address": {"type": "string"},
+    "city": {"type": "string"},
+    "potential": {"$ref": "#/definitions/potential"},
+    "confidence": {"$ref": "#/definitions/labelled"},
+    "timing": {"$ref": "#/definitions/labelled"},
+    "facts": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "employees": {"type": "integer", "minimum": 0},
+        "sqft": {"type": "integer", "minimum": 0},
+        "mw": {"type": "number", "minimum": 0},
+        "fuel": {"type": "string"},
+        "gen_mwh": {"type": ["number", "null"]},
+        "cogen": {"type": "boolean"}
+      }
+    },
+    "sources": {"type": "array", "items": {
+      "type": "object", "additionalProperties": false, "required": ["label", "what", "as_of"],
+      "properties": {"label": {"type": "string"}, "what": {"type": "string"}, "as_of": {"type": "string"}}}},
+    "flags": {"type": "array", "items": {
+      "type": "object", "additionalProperties": false, "required": ["k", "why"],
+      "properties": {"k": {"enum": ["dupe", "shared_site", "placeholder", "low_flow", "unverified"]}, "why": {"type": "string"}}}},
+    "status": {
+      "type": "object", "additionalProperties": false, "required": ["value"],
+      "properties": {
+        "value": {"enum": ["active", "defunct", "not_a_fit", "assigned_elsewhere", "duplicate"]},
+        "change_id": {"type": ["string", "null"]},
+        "reason": {"type": ["string", "null"]},
+        "duplicate_of": {"type": ["string", "null"]},
+        "since": {"type": ["string", "null"]}
+      }
+    }
+  },
+  "definitions": {
+    "labelled": {"type": "object", "additionalProperties": false, "required": ["k", "label"],
+      "properties": {"k": {"type": "string"}, "label": {"type": "string"}, "why": {"type": "string"}}},
+    "potential": {
+      "type": "object", "additionalProperties": false, "required": ["band", "score", "factors", "reasons"],
+      "properties": {
+        "band": {"enum": ["High", "Medium", "Low", "Insufficient information"]},
+        "score": {"type": "number", "minimum": 0, "maximum": 100},
+        "factors": {"type": "object", "additionalProperties": false,
+          "required": ["intensity", "scale", "breadth", "verified"],
+          "properties": {
+            "intensity": {"type": "number", "minimum": 0, "maximum": 3},
+            "scale": {"type": "number", "minimum": 0, "maximum": 3},
+            "breadth": {"type": "number", "minimum": 0, "maximum": 3},
+            "verified": {"type": "number", "minimum": 0, "maximum": 3}}},
+        "reasons": {"type": "array", "items": {"type": "string"}, "maxItems": 3},
+        "scale_verified": {"type": "boolean"},
+        "scale_text": {"type": "string"},
+        "verified_facts": {"type": "array", "items": {"type": "string"}},
+        "apps_verified": {"type": "array", "items": {"type": "string"}},
+        "subtype": {"enum": ["steam", "thermal", "hydro", "peaker", "landfill_gas", "small_unit", null]}
+      }
+    }
+  }
+}

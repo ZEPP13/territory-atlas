@@ -1,0 +1,62 @@
+# Code-only repository. Deny new files by default; review each new tracked path.
+# Local data, licensed exports, history, generated HTML, screenshots, credentials,
+# and all spreadsheets stay on this Mac. Never use git add -f for those files.
+*
+!/00-framework/
+!/04-outputs/
+!/05-preview/
+!/06-map-mockups/
+!/07-war-table/
+!/07-war-table/config/
+!/07-war-table/schemas/
+!/07-war-table/tests/
+!/07-war-table/wartable/
+!/.gitignore
+!/00-framework/TERRITORY.md
+!/00-framework/WAR-TABLE.md
+!/04-outputs/merge.py
+!/05-preview/geo_build.py
+!/05-preview/ids.py
+!/05-preview/industry.py
+!/05-preview/palette.py
+!/05-preview/potential.py
+!/06-map-mockups/terrain_build.py
+!/07-war-table/README.md
+!/07-war-table/build.py
+!/07-war-table/config/progression.json
+!/07-war-table/config/signals.json
+!/07-war-table/dashboard_template.html
+!/07-war-table/schemas/entity.schema.json
+!/07-war-table/schemas/ledger_change.schema.json
+!/07-war-table/schemas/logbook_event.schema.json
+!/07-war-table/schemas/signal.schema.json
+!/07-war-table/serve.py
+!/07-war-table/tests/__init__.py
+!/07-war-table/tests/helpers.py
+!/07-war-table/tests/test_ledger.py
+!/07-war-table/tests/test_progression.py
+!/07-war-table/tests/test_registry_real.py
+!/07-war-table/tests/test_schema.py
+!/07-war-table/tests/test_server.py
+!/07-war-table/tests/test_signals.py
+!/07-war-table/tests/test_state.py
+!/07-war-table/wartable/__init__.py
+!/07-war-table/wartable/progression.py
+!/07-war-table/wartable/registry.py
+!/07-war-table/wartable/schema.py
+!/07-war-table/wartable/signals.py
+!/07-war-table/wartable/state.py
+!/07-war-table/wartable/store.py
+!/CLAUDE.md
+!/README.md
+
+# Explicit backstop, including any future nested copy.
+[Pp]lant [Cc]ontacts.xlsx
+*.xlsx
+*.xls
+*.xlsm
+.env*
+*.pem
+*.key
+__pycache__/
+.DS_Store

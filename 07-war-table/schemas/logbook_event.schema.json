@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "war-table/logbook-event",
+  "title": "Logbook event (02-data/logbook/logbook.jsonl, append-only). One tap = one event. Not a CRM.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "ts", "actor", "action"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^lb-[a-z0-9]{12}$"},
+    "ts": {"type": "string", "format": "date-time"},
+    "actor": {"type": "string", "pattern": "^joe$"},
+    "action": {"enum": ["surveyed", "visited", "met", "quoted", "won", "undo", "signal_reviewed", "signal_pinned", "signal_dismissed"]},
+    "entity_id": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]+$", "maxLength": 80},
+    "signal_id": {"type": "string", "pattern": "^sig-[A-Za-z0-9_.:-]+$", "maxLength": 120},
+    "undo_of": {"type": "string", "pattern": "^lb-[a-z0-9]{12}$"},
+    "role": {"type": "string", "maxLength": 80, "pattern": "^[^@0-9]*$"},
+    "band": {"enum": ["High", "Medium", "Low", "Insufficient information"]}
+  }
+}
