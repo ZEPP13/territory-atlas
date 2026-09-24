@@ -47,7 +47,7 @@ cd /Users/zepp/Documents/EMERSON/territory-atlas
 python3 -m unittest discover 07-war-table/tests
 ```
 
-All 58 existing tests must pass. Real-registry tests require local data and write a generated
+All 59 tests must pass. Real-registry tests require local data and write a generated
 deduplication log; server tests use throwaway fixtures. For manual engagement tests, run the
 server against a copy of `02-data/` using `--data-dir`, never the real logbook.
 

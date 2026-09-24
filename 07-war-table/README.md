@@ -35,7 +35,7 @@ read-only (no logging).
 | `build.py` | the one command; writes `dist/manifest.json` with input hashes and test results |
 | `dashboard_template.html` | the Admiralty Chart page |
 | `schemas/`, `config/` | contracts and every tunable number |
-| `tests/` | 58 tests: validator, ledger, progression, signals, real registry, server |
+| `tests/` | 59 tests: validator, ledger, progression, signals, real registry, server |
 
 ## Known limits
 - three.js and fonts load from CDNs. For a monitor that must work offline, vendor them.
@@ -60,3 +60,23 @@ Facility-card body text is larger and its scroll area stops above the control st
 Validation: 58 Python tests and Node syntax check; browser inspection on an isolated data copy.
 No registry decisions, signal records, engagement records, or scoring rules changed.
 Dashboard-template and palette hashes are now included in the build manifest.
+
+## Everyday controls
+
+- **Find a facility** is always visible. Search by facility name, parent company, county/city,
+  or industry. It includes active low-opportunity facilities hidden at overview zoom. Enter
+  opens the first result, Down moves into results, and Escape clears search. `/` focuses search
+  when the map has keyboard focus. Search does not change registry records or filters.
+- **Dismiss notification** appears directly in the horizon list and near the top of facility
+  cards. It clears the project's marker and ticker item without removing the facility.
+  **Dismissed** in the horizon lets you **Restore & pin**, which appends a pin event rather
+  than deleting the dismissal. It does not award engagement or review points.
+- **All notifications** exposes the full list, including unplaced signals. Only notifications
+  for active facilities (or unplaced signals) are included. Counts update after a dismissal.
+- The bottom navigation bar has **− / +**, **Fit territory**, and **Top-down / Tilted view**.
+  Scroll zoom stays anchored under the pointer and recognizes wheel/trackpad delta units.
+  **Fit territory** closes the card and restores the standard overview. Drift is now opt-in
+  and stops when you interact with the map.
+- Dismissal/restore manual checks use a copied data directory. The server regression test
+  verifies that triage survives reloading and leaves facility state, source signals and scores
+  unchanged. No test activity is added to the real logbook.

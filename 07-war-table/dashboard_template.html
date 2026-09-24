@@ -195,6 +195,25 @@ body.present .hz-note,body.present .hz-row,body.present #legend{font-size:15px}
 body.present .hz-item span,body.present .hz-date,body.present .sig small{font-size:12px}
 @media(max-width:1050px){#horizon{width:290px}#card{width:360px}#title{min-width:250px}#title h1{font-size:27px}}
 @media(max-width:740px){#title{min-width:0;width:calc(100% - 36px);box-sizing:border-box}#tally{display:none}#conn{top:auto;bottom:116px}#horizon,#card{top:170px;width:calc(100% - 36px);max-height:calc(100vh - 325px)}#legend{display:none}#ctrl{left:18px;right:18px;justify-content:center;gap:3px}#compass{display:none}.cbtn{padding:8px 7px}}
+/* Everyday controls stay visible; chart decoration must not hide basic tasks. */
+#finder{left:365px;top:16px;width:clamp(260px,calc(100vw - 725px),420px);padding:10px 12px;box-sizing:border-box;z-index:12}
+#finder label{display:block;font-size:14px;font-weight:600;margin-bottom:5px}
+.find-row{display:flex;gap:5px}#facility-search{min-width:0;flex:1;font:15px var(--f-cond);padding:8px;border:1px solid var(--plateLine);background:#fffaf0;color:var(--ink)}
+#search-results{max-height:calc(100vh - 245px);overflow:auto;margin-top:7px}
+#search-results:empty{display:none}.search-result{display:block;width:100%;text-align:left;border:0;border-top:1px solid var(--plateLine);padding:9px 2px;background:none;cursor:pointer;font-size:15px}.search-result small{display:block;color:var(--muted);font-size:12px;margin-top:3px}.search-result:hover,.search-result:focus{background:#e7ddc8}.search-count{font-size:12px;margin:7px 0;color:var(--muted)}
+.notice{border-top:1px solid var(--plateLine);padding-bottom:9px}.notice .hz-item{border:0}.notice-actions{display:flex;gap:5px;flex-wrap:wrap}.notice-actions button,.sigbtns button{font-size:12px;padding:6px 9px;text-decoration:none;border:1px solid var(--plateLine);background:var(--plateSolid);cursor:pointer}.notice-actions button:hover,.sigbtns button:hover{border-color:var(--accent)}
+.notification-tabs{display:flex;gap:5px;margin:10px 0}.notification-tabs button{flex:1}.notification-tabs .chosen{background:var(--ink);color:var(--plateSolid)}
+#navigation{position:absolute;left:50%;bottom:62px;transform:translateX(-50%);display:flex;align-items:center;gap:5px;padding:8px}
+#navigation button{font-size:14px;min-width:36px;min-height:36px;padding:5px 10px}#navigation .zoom-number{font:12px var(--f-mono);min-width:44px;text-align:center}
+#ctrl{bottom:116px;padding:5px;gap:4px}#ctrl .cbtn{font-size:10px;padding:7px}#compass{width:30px;height:30px}
+#horizon,#card{max-height:calc(100vh - 310px)}
+#action-status{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);z-index:85;background:var(--plateSolid);border:1px solid var(--brass);box-shadow:var(--shadow);padding:9px 12px;font-size:14px;max-width:calc(100vw - 50px);display:none}
+#action-status.show{display:flex;align-items:center;gap:10px}#action-status button{white-space:nowrap}
+#toast-close{position:absolute;right:7px;top:5px;background:none;border:0;cursor:pointer;font-size:20px}#toast.show{pointer-events:auto}
+#card .notification-section{margin:8px 0 12px}.sigbtns{flex-wrap:wrap}.navigation-help{font-size:11px;text-align:center;color:var(--muted);margin-top:4px}
+@media(max-width:1050px){#finder{left:335px;right:345px;width:auto;min-width:235px}#navigation{left:18px;transform:none}#legend{bottom:116px;width:280px}}
+@media(max-width:900px){#finder{left:18px;right:auto;top:174px;width:280px}#finder:focus-within{z-index:20}#navigation{left:18px}#legend{display:none}}
+@media(max-width:740px){#finder{top:175px;width:calc(100% - 36px)}#horizon,#card{top:270px;max-height:calc(100vh - 435px)}#conn{display:none}#navigation{left:18px;right:18px;transform:none;justify-content:center}#ctrl{bottom:112px}.navigation-help{display:none}}
 </style>
 
 <canvas id="gl" aria-label="Three-dimensional chart of the Eastern Virginia sales territory. Drag to pan, right-drag or shift-drag to rotate and tilt, scroll to zoom."></canvas>
@@ -210,6 +229,11 @@ body.present .hz-item span,body.present .hz-date,body.present .sig small{font-si
       <div class="bar"><i id="rk-bar"></i></div>
       <div class="rs" id="rk-sub"></div>
     </button>
+  </div>
+  <div class="plate" id="finder" role="search">
+    <label for="facility-search">Find a facility</label>
+    <div class="find-row"><input id="facility-search" type="search" autocomplete="off" placeholder="Name, company, county or industry…" aria-controls="search-results"><button id="search-clear" class="btn" type="button" aria-label="Clear search">×</button></div>
+    <div id="search-results"></div>
   </div>
   <div class="plate" id="tally">
     <div class="tl a"><i>!</i><div><b id="n-act">0</b><span>active<br>projects</span></div></div>
@@ -228,10 +252,17 @@ body.present .hz-item span,body.present .hz-date,body.present .sig small{font-si
     <div><em><span class="pencil"></span></em>Pencil chart inks in as you survey</div>
     <div id="scale"><i id="scale-bar" style="width:80px"></i><span id="scale-t">10 mi</span></div>
   </div>
+  <div class="plate" id="navigation" aria-label="Map navigation">
+    <button class="btn" id="zoom-out" type="button" aria-label="Zoom out" title="Zoom out (−)">−</button>
+    <span class="zoom-number" id="zoom-level" aria-label="Zoom relative to full territory">1.0×</span>
+    <button class="btn" id="zoom-in" type="button" aria-label="Zoom in" title="Zoom in (+)">+</button>
+    <button class="btn" id="fit-territory" type="button">Fit territory</button>
+    <button class="btn" id="flat-view" type="button" aria-pressed="false">Top-down</button>
+  </div>
   <div class="plate" id="ctrl">
     <button class="cbtn" id="brief" type="button" title="B">Briefing</button>
     <button class="cbtn" id="drift" type="button" title="D">Drift</button>
-    <button class="cbtn" id="home" type="button" title="R">Reset</button>
+    <button class="cbtn" id="home" type="button" title="R">Reset view</button>
     <button class="cbtn" id="methodbtn" type="button" title="M">Method</button>
     <button class="cbtn" id="present" type="button" title="P">Present</button>
     <svg id="compass" viewBox="-24 -24 48 48" aria-label="Compass"><g id="rose">
@@ -243,7 +274,8 @@ body.present .hz-item span,body.present .hz-date,body.present .sig small{font-si
   <div class="plate" id="log"><div class="lh">Ship&rsquo;s log</div><div class="ticker"><div class="ticker-track" id="ticker"></div></div></div>
 </div>
 <div id="tip"></div>
-<div id="toast" aria-live="polite"><div class="seal" id="toast-seal">&#9875;</div><div class="eyebrow" id="toast-k">Promotion</div><b id="toast-t"></b><div class="src" id="toast-s"></div></div>
+<div id="action-status" role="status" aria-live="polite"></div>
+<div id="toast" aria-live="polite"><button id="toast-close" type="button" aria-label="Close notification">×</button><div class="seal" id="toast-seal">&#9875;</div><div class="eyebrow" id="toast-k">Promotion</div><b id="toast-t"></b><div class="src" id="toast-s"></div></div>
 <div id="method" role="dialog" aria-modal="true" aria-label="Method"><div class="sheet" id="method-sheet"></div></div>
 <div id="veil"><div>Charting the territory&hellip;</div></div>
 <div id="err"></div>
@@ -493,6 +525,22 @@ const SITES=DB.entities.filter(e=>e.scope==="core").map(e=>({
 const SITEBY={}; SITES.forEach(s=>{SITEBY[s.id]=s; s.x=wx(s.lo); s.y=wy(s.la);});
 let STATE=DB.state;
 const API={live:false};
+
+/* Search all active in-portfolio facilities, including those hidden at overview zoom. */
+const searchText=s=>[s.n,s.e.parent,s.j,s.e.city,s.s,FAMBY[s.f]?.label,DB.clusters[s.c]?.name].filter(Boolean).join(" ").toLocaleLowerCase();
+function searchFacilities(query){
+  const words=query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  if(!words.length)return [];
+  return SITES.filter(s=>s.live&&words.every(w=>searchText(s).includes(w))).sort((a,b)=>a.n.localeCompare(b.n));
+}
+function renderSearch(){
+  const query=$("facility-search").value, result=$("search-results");
+  if(!query.trim()){result.innerHTML="";return;}
+  const matches=searchFacilities(query);
+  result.innerHTML=`<p class="search-count" role="status">${matches.length} matching ${matches.length===1?"facility":"facilities"}${matches.length>30?" · showing 30; narrow your search":""}</p>`+
+    matches.slice(0,30).map(s=>`<button class="search-result" type="button" data-search-id="${esc(s.id)}"><b>${esc(s.n)}</b><small>${esc(s.j)} · ${esc(FAMBY[s.f]?.label)} · ${esc(s.p)} opportunity</small></button>`).join("");
+}
+function clearSearch(){ $("facility-search").value="";renderSearch(); }
 
 /* project markers come from the SIGNALS layer: one marker per facility, its most advanced project stage */
 const STAGE_ORDER=SCFG.stage_order, stageIdx=st=>STAGE_ORDER.indexOf(st);
@@ -756,7 +804,7 @@ addEventListener("resize",resize);
 /* =============================== interaction =============================== */
 const gl=$("gl"); let drag=null, lastInput=performance.now(), drift=false, driftBase=0, touring=false;
 const pointers=new Map();
-const touch=()=>{lastInput=performance.now(); if(touring)stopTour();};
+const touch=()=>{lastInput=performance.now(); if(touring)stopTour(); if(drift){drift=false;$("drift").classList.remove("hot");}};
 gl.addEventListener("contextmenu",e=>e.preventDefault());
 gl.addEventListener("pointerdown",e=>{
   touch(); pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
@@ -770,7 +818,7 @@ gl.addEventListener("pointermove",e=>{
   if(pointers.has(e.pointerId))pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
   if(!drag){ hover(e); return; }
   touch();
-  if(pointers.size===2&&drag.pinch){ goal.d=drag.d0*drag.pinch/pinchDist(); clampGoal(); return; }
+  if(pointers.size===2&&drag.pinch){ drag.moved=true; goal.d=drag.d0*drag.pinch/pinchDist(); clampGoal(); return; }
   const dx=e.clientX-drag.x, dy=e.clientY-drag.y; drag.x=e.clientX; drag.y=e.clientY;
   if(Math.abs(dx)+Math.abs(dy)>1)drag.moved=true;
   if(drag.rot){ goal.yaw-=dx*.005; goal.pitch+=dy*.004; }
@@ -782,22 +830,37 @@ const up=e=>{pointers.delete(e.pointerId);
   if(drag&&!drag.moved&&e.type==="pointerup")click(e);
   if(pointers.size===0){drag=null;gl.classList.remove("drag");}};
 gl.addEventListener("pointerup",up); gl.addEventListener("pointercancel",up);
-gl.addEventListener("wheel",e=>{e.preventDefault(); touch();
-  const f=Math.exp(e.deltaY*.0011), before=goal.d; goal.d=clamp(goal.d*f,DMIN,DMAX);
-  const hit=groundAt(e.clientX,e.clientY);
-  if(hit){const t=1-goal.d/before; goal.tx+=(hit.x-goal.tx)*t; goal.tz+=(hit.z-goal.tz)*t;}
-  clampGoal();},{passive:false});
+const NAVCAM=new THREE.PerspectiveCamera(), NAVRAY=new THREE.Raycaster();
+function groundForView(view,cx,cy){
+  NAVCAM.copy(camera); const cp=Math.cos(view.pitch),sp=Math.sin(view.pitch);
+  NAVCAM.position.set(view.tx+view.d*cp*Math.sin(view.yaw),view.d*sp,view.tz+view.d*cp*Math.cos(view.yaw));
+  NAVCAM.lookAt(view.tx,0,view.tz);NAVCAM.updateMatrixWorld();
+  NAVRAY.setFromCamera({x:cx/innerWidth*2-1,y:1-cy/innerHeight*2},NAVCAM);
+  return NAVRAY.ray.intersectPlane(plane,new THREE.Vector3());
+}
+function zoomAt(factor,cx=innerWidth/2,cy=innerHeight/2){
+  touch();const before=groundForView(goal,cx,cy);
+  goal.d=clamp(goal.d*factor,DMIN,DMAX);
+  const after=groundForView(goal,cx,cy);
+  if(before&&after){goal.tx+=before.x-after.x;goal.tz+=before.z-after.z;}
+  clampGoal();
+}
+gl.addEventListener("wheel",e=>{e.preventDefault();
+  const pixels=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?innerHeight:1);
+  zoomAt(Math.exp(clamp(pixels,-160,160)*.0015),e.clientX,e.clientY);
+},{passive:false});
 const ray=new THREE.Raycaster(), plane=new THREE.Plane(new THREE.Vector3(0,1,0),0), v3=new THREE.Vector3();
 function groundAt(cx,cy){ ray.setFromCamera({x:cx/innerWidth*2-1,y:-(cy/innerHeight)*2+1},camera);
   return ray.ray.intersectPlane(plane,new THREE.Vector3()); }
 addEventListener("keydown",e=>{
-  if(e.target.closest&&e.target.closest("input,textarea,select"))return;
+  if(e.target.closest&&e.target.closest("input,textarea,select,button,[contenteditable]"))return;
   const k=e.key; let used=true; touch();
+  if(k==="/"){e.preventDefault();$("facility-search").focus();return;}
   if(k==="b"||k==="B")runBriefing(); else if(k==="d"||k==="D")toggleDrift();
   else if(k==="m"||k==="M")toggleMethod(); else if(k==="p"||k==="P")togglePresent();
   else if(k==="r"||k==="R"){homeView();closeCard();}
   else if(k==="Escape"){ if($("method").classList.contains("open"))toggleMethod(false); else closeCard(); }
-  else if(k==="+"||k==="=")goal.d/=1.35; else if(k==="-"||k==="_")goal.d*=1.35;
+  else if(k==="+"||k==="=")zoomAt(1/1.25); else if(k==="-"||k==="_")zoomAt(1.25);
   else if(k==="q"||k==="Q")goal.yaw+=.12; else if(k==="e"||k==="E")goal.yaw-=.12;
   else if(k==="w"||k==="W")goal.pitch+=.07; else if(k==="s"||k==="S")goal.pitch-=.07;
   else if(k.startsWith("Arrow")){const st=goal.d*.08,cy=Math.cos(goal.yaw),sy=Math.sin(goal.yaw);
@@ -880,7 +943,7 @@ function applyState(first){
   for(let n=1;n<=12;n++){ const share=cl["C"+n]?cl["C"+n].surveyed_share:0;
     coverData[n*4]=Math.round(255*Math.sqrt(clamp(share/ST.inkFullAt,0,1))); coverData[n*4+3]=255; }
   coverTex.needsUpdate=true;
-  renderRank(first); renderTally(); renderHorizon(); renderTicker(); renderConn();
+  renderRank(first); renderTally(); renderHorizon(); renderTicker(); renderConn();renderSearch();
   if(SEL)renderCard(SEL,CARDOPT);
   if($("method").classList.contains("open"))renderMethod();
   if(API.live&&STATE.signals.some(s=>!BOOT_SIGNAL_IDS.has(s.id)))NEEDS_RELOAD=true;
@@ -912,6 +975,7 @@ const STAGE_TEXT={rumored:"Rumored",announced:"Announced · spec window",design:
   permitting:"Permitting · spec window",construction:"Under construction",commissioning:"Commissioning",
   operating:"Operating",on_hold:"On hold",cancelled:"Cancelled"};
 function oppRank(e){ return (POTRANK[e?.potential?.band]||0)*1e7+(e?.facts?.employees||0)+(e?.facts?.sqft||0)/100; }
+let NOTICES="overview";
 function renderHorizon(){
   const live=STATE.signals.filter(s=>s.triage!=="dismissed"&&(!s.entity_id||(SITEBY[s.entity_id]&&SITEBY[s.entity_id].live)));
   const spec=live.filter(s=>s.spec_window), cons=live.filter(s=>ACTIVE_STAGES.has(s.stage));
@@ -919,8 +983,11 @@ function renderHorizon(){
   const fresh=live.filter(s=>s.fresh>0).length;
   const onlySnap=Object.keys(STATE.counts.signals_by_source).every(k=>k==="registry_snapshot");
   const top=(arr,n)=>arr.filter(s=>s.entity_id).sort((a,b)=>b.fresh-a.fresh||oppRank(ENT[b.entity_id])-oppRank(ENT[a.entity_id])).slice(0,n);
-  const item=s=>{const e=ENT[s.entity_id]; return `<button class="hz-item" type="button" data-id="${esc(s.entity_id)}">
-    <b>${esc(e.name)}</b><span>${esc(e.jurisdiction)} · ${esc(e.potential?.band||"")} opportunity</span></button>`;};
+  const dismissed=STATE.signals.filter(s=>s.triage==="dismissed"&&(!s.entity_id||SITEBY[s.entity_id]?.live));
+  const actions=s=>API.live?`<div class="notice-actions edit"><button type="button" data-notice="${esc(s.id)}" data-act="${s.triage==="dismissed"?"signal_pinned":"signal_dismissed"}">${s.triage==="dismissed"?"Restore & pin":"Dismiss notification"}</button></div>`:"";
+  const item=s=>{const e=ENT[s.entity_id]; return `<div class="notice"><button class="hz-item" type="button" ${e?`data-id="${esc(s.entity_id)}"`:`data-unplaced="${esc(s.id)}"`}>
+    <b>${esc(e?e.name:s.headline)}</b><span>${esc(e?e.jurisdiction:"Unplaced signal")} · ${esc(STAGE_TEXT[s.stage]||s.stage)}</span></button>${actions(s)}</div>`;};
+  const listing=NOTICES==="dismissed"?dismissed:live;
   const compact=$("horizon").classList.contains("compact");
   $("horizon").innerHTML=`<div class="hz-head"><h2>On the horizon</h2><button class="hz-toggle" type="button" id="horizon-toggle" aria-expanded="${!compact}" aria-controls="horizon-list">${compact?"Expand":"Fold"}</button></div>
     <p class="hz-date">${onlySnap?`Project snapshot · ${esc(SCFG.registry_snapshot.as_of)}`:"Project sources · dates on each signal"}</p>
@@ -931,18 +998,19 @@ function renderHorizon(){
     <p class="hz-note">${fresh?`<b>${fresh} new</b> in the last week. `:onlySnap
       ?`No new arrivals yet: every signal is the Industrial Info snapshot of ${esc(SCFG.registry_snapshot.as_of)}. `
       :"No new arrivals in the last week. "}Meters are specified before construction starts, so the window is where to be early.</p>
-    <div class="hz-list" id="horizon-list"><div class="eyebrow">Spec window · highest opportunity</div>${top(spec,5).map(item).join("")}
-    <div class="eyebrow" style="margin-top:10px">Under construction</div>${top(cons,3).map(item).join("")}</div>`;
+    <div class="hz-list" id="horizon-list"><div class="notification-tabs"><button class="btn ${NOTICES==="inbox"?"chosen":""}" type="button" data-notice-view="${NOTICES==="inbox"?"overview":"inbox"}">${NOTICES==="inbox"?"Summary":"All notifications"} (${live.length})</button><button class="btn ${NOTICES==="dismissed"?"chosen":""}" type="button" data-notice-view="${NOTICES==="dismissed"?"overview":"dismissed"}">Dismissed (${dismissed.length})</button></div>
+    ${NOTICES!=="overview"?`<div class="eyebrow">${NOTICES==="dismissed"?"Dismissed notifications":"All current notifications"}</div>${listing.map(item).join("")||'<p class="hz-note">No notifications here.</p>'}`:`<div class="eyebrow">Spec window · highest opportunity</div>${top(spec,5).map(item).join("")}
+    <div class="eyebrow" style="margin-top:10px">Under construction</div>${top(cons,3).map(item).join("")}`}</div>`;
 }
 const VERB={surveyed:"Surveyed",visited:"Landfall · visited",met:"Landfall · met",quoted:"Established · quoted",
   won:"Anchored · won",signal_reviewed:"Reviewed",signal_pinned:"Pinned",signal_dismissed:"Dismissed"};
 function renderTicker(){
   const day=ts=>new Date(ts).toLocaleDateString(undefined,{month:"short",day:"numeric"});
   const items=[];
-  STATE.recent.filter(ev=>VERB[ev.action]).slice(0,14).forEach(ev=>{
+  STATE.recent.filter(ev=>VERB[ev.action]&&(!ev.signal_id||sigById(ev.signal_id)?.triage!=="dismissed")).slice(0,14).forEach(ev=>{
     const e=ENT[ev.entity_id], sg=ev.signal_id?sigById(ev.signal_id):null;
     items.push(`<span><b>${day(ev.ts)}</b><em>${esc(VERB[ev.action])}</em>${esc(e?e.name:(sg?sg.headline:""))}${ev.role?` · ${esc(ev.role)}`:""}</span>`);});
-  STATE.signals.slice().sort((a,b)=>(b.fresh-a.fresh)||b.received_at.localeCompare(a.received_at)
+  STATE.signals.filter(s=>s.triage!=="dismissed"&&(!s.entity_id||SITEBY[s.entity_id]?.live)).sort((a,b)=>(b.fresh-a.fresh)||b.received_at.localeCompare(a.received_at)
       ||(ACTIVE_STAGES.has(b.stage)-ACTIVE_STAGES.has(a.stage))||oppRank(ENT[b.entity_id])-oppRank(ENT[a.entity_id]))
     .slice(0,16).forEach(s=>items.push(`<span><b>${esc(s.source.as_of)}</b><em>${esc(s.source.name)}</em>${esc(s.headline)}</span>`));
   const html=items.join("")||"<span>No entries yet.</span>";
@@ -961,6 +1029,7 @@ function select(s,opt){
   goal.d=FITD*(opt.tour?.26:.32);
   const off=innerWidth>900?goal.d*.16:0;          // keep the site clear of the card
   goal.tx=sX(s.x)+Math.cos(goal.yaw)*off; goal.tz=sZ(s.y)-Math.sin(goal.yaw)*off+goal.d*.04; clampGoal();
+  $("search-results").innerHTML="";
   SEL=s; document.body.classList.add("focus","carding");
   FOCUS.pos.value.set(sX(s.x),sZ(s.y)); FOCUS.radius.value=goal.d*.12;
   SELR.list[0]=s; SELR.g.attributes.position.array.set([sX(s.x),s.h+1,sZ(s.y)]);
@@ -974,7 +1043,7 @@ function closeCard(){ $("card").style.display="none"; SEL=null; CARDOPT={};
 const sigHTML=sg=>`<div class="sig ${ACTIVE_STAGES.has(sg.stage)?"a":""}"><b>${esc(sg.headline)}</b>
   <small>${sg.spec_window?'<span class="tag spec">spec window</span>':""}${sg.generated_by==="ai"?'<span class="tag ai">AI summary</span>':""}<span class="tag">${esc(sg.source.type.replace(/_/g," "))}</span>${esc(sg.source.name)} · as of ${esc(sg.source.as_of)} · match ${esc(sg.match)}${sg.triage?` · <b>${esc(sg.triage)}</b>`:""}</small>
   ${sg.url?`<small><a href="${esc(sg.url)}" target="_blank" rel="noopener noreferrer">Source</a></small>`:""}
-  ${API.live?`<div class="sigbtns edit">${[["signal_reviewed","Mark reviewed"],["signal_pinned","Pin"],["signal_dismissed","Dismiss"]]
+  ${API.live?`<div class="sigbtns edit">${(sg.triage==="dismissed"?[["signal_pinned","Restore & pin"]]:[["signal_reviewed","Mark reviewed"],["signal_pinned","Pin"],["signal_dismissed","Dismiss notification"]])
     .map(([a,l])=>`<button class="link" type="button" data-sig="${esc(sg.id)}" data-act="${a}">${l}</button>`).join("")}</div>`:""}</div>`;
 function nearby(s,limit){
   return SITES.filter(o=>o!==s&&o.live).map(o=>[o,Math.hypot(o.x-s.x,o.y-s.y)*69])
@@ -1010,6 +1079,7 @@ function renderCard(s,opt){
     <h3>${esc(e.name)}</h3>
     <div class="ind">${esc(FAMBY[e.family]?.label||e.family)}${e.subindustry?" · "+esc(e.subindustry):""}</div>
     ${s.live?"":`<p class="err">Off the chart: ${esc(s.status.replace(/_/g," "))}${status?.reason?` — ${esc(status.reason)}`:""}</p>`}
+    ${(SIG_BY_ENT[s.id]||[]).length?`<div class="sec notification-section"><div class="eyebrow">Project notifications</div>${SIG_BY_ENT[s.id].map(sigHTML).join("")}</div>`:""}
     <div class="pips">${STAGES.map((id,i)=>`<div class="pip${i>0&&i<=si?" on":""}${i===si?" cur":""}"><i></i><span>${esc(STAGE_LABEL[id])}</span></div>`).join("")}</div>
     <div class="taps">${tapBtn("surveyed","Surveyed")}${tapBtn("visited","Visited")}${tapBtn("met","Met")}${tapBtn("quoted","Quoted")}${tapBtn("won","Won")}</div>
     <div class="roleform edit" id="roleform"><input id="role" maxlength="80" placeholder="Role met, optional (e.g. E&amp;I supervisor)"><button class="btn primary" type="button" id="role-go">Log</button></div>
@@ -1023,11 +1093,25 @@ function renderCard(s,opt){
       ${facts.length?`<dt>Plant</dt><dd>${esc(facts.join(" · "))}</dd>`:""}
       ${e.parent?`<dt>Parent</dt><dd>${esc(e.parent)}</dd>`:""}</dl>
     ${pot.reasons?`<div class="sec"><div class="eyebrow">Why it rates ${esc(pot.band)}</div>${pot.reasons.slice(0,2).map(x=>`<p>${esc(resolveTxt(x,e.family))}</p>`).join("")}</div>`:""}
-    ${(SIG_BY_ENT[s.id]||[]).length?`<div class="sec"><div class="eyebrow">Signals</div>${SIG_BY_ENT[s.id].map(sigHTML).join("")}</div>`:""}
+
     <div class="sec src">Sources: ${e.sources.map(x=>`${esc(x.label)} (${esc(x.as_of)})`).join(" · ")||"none"}${e.flags.some(f=>f.k==="dupe")?" · <b>flagged as a possible duplicate</b>":""}</div>
     ${API.live?`<div class="sec edit">${recordHTML(s)}</div>`:""}`;
   $("card").style.display="block";
   wireCard(s);
+}
+let noticeBusy=false;
+async function actOnNotice(id,action,button){
+  if(noticeBusy||!API.live||document.body.classList.contains("present"))return;
+  touch();noticeBusy=true;if(button)button.disabled=true;
+  const box=$("action-status");
+  try{
+    await post("/api/logbook",{action,signal_id:id});
+    box.innerHTML=`<span>${action==="signal_dismissed"?"Notification dismissed. The facility stays on your chart.":action==="signal_pinned"?"Notification pinned and visible on the chart.":"Notification marked reviewed."}</span>${action==="signal_dismissed"?`<button class="btn edit" id="notice-restore" type="button">Restore & pin</button>`:""}<button class="btn" id="status-close" type="button" aria-label="Close status message">×</button>`;
+    box.classList.add("show");
+    if($("notice-restore"))$("notice-restore").onclick=()=>actOnNotice(id,"signal_pinned",$("notice-restore"));
+    $("status-close").onclick=()=>box.classList.remove("show");
+  }catch(err){box.textContent="Could not update notification: "+err.message;box.classList.add("show");}
+  finally{noticeBusy=false;if(button?.isConnected)button.disabled=false;}
 }
 function cardError(msg){ const el=$("card-err"); if(el)el.textContent=msg; }
 function wireCard(s){
@@ -1041,8 +1125,7 @@ function wireCard(s){
     doTap(s,"met",role||undefined); };
   const role=$("role"); if(role)role.onkeydown=e=>{ if(e.key==="Enter")go.click(); };
   const u=$("undo"); if(u)u.onclick=async()=>{ touch(); try{ await post("/api/logbook",{action:"undo",undo_of:STATE.last_tap[s.id]}); }catch(err){cardError(err.message);} };
-  c.querySelectorAll("[data-sig]").forEach(b=>b.onclick=async()=>{ touch();
-    try{ await post("/api/logbook",{action:b.dataset.act,signal_id:b.dataset.sig}); }catch(err){cardError(err.message);} });
+  c.querySelectorAll("[data-sig]").forEach(b=>b.onclick=()=>actOnNotice(b.dataset.sig,b.dataset.act,b));
   const ro=$("rec-open"); if(ro)ro.onclick=()=>$("recform").classList.toggle("open");
   const ch=$("rec-change"); if(ch)ch.onchange=()=>{$("rec-duprow").style.display=ch.value==="mark_duplicate"?"flex":"none";};
   const save=$("rec-save"); if(save)save.onclick=async()=>{ touch();
@@ -1136,16 +1219,17 @@ function toggleMethod(on){ const el=$("method"); on=on??!el.classList.contains("
   if(on)renderMethod(); el.classList.toggle("open",on); $("methodbtn").classList.toggle("hot",on); }
 
 /* ================================ frame loop ================================ */
-let frameN=0, LOWVIS=0;
+let frameN=0, LOWVIS=0, lastFrameMs=null;
 const PING_HOME=col3(ST.ping), PING_NEW=col3(ST.quest);
 function frame(ms){ tick(ms); requestAnimationFrame(frame); }
 function tick(ms){
   const t=ms/1000; frameN++;
   const idle=performance.now()-lastInput;
   // an always-on display drifts on its own after three quiet minutes
-  if(!CAPTURE&&!drift&&!touring&&!SEL&&idle>180000)toggleDrift(true);
+  // Ambient drift is opt-in through the Drift button; navigation always stops it.
   if(drift&&!touring&&idle>1500){ goal.yaw=driftBase+Math.sin(t*.06)*.28; }
-  const k=drag?.35:.085;
+  const dt=lastFrameMs===null?1/60:clamp((ms-lastFrameMs)/1000,0,.1);lastFrameMs=ms;
+  const k=CAPTURE?1:1-Math.exp(-(drag?24:14)*dt);
   for(const p of ["tx","tz","d","pitch","yaw"])cam[p]+=(goal[p]-cam[p])*k;
   placeCamera();
   U.time.value=t; RA.u.time.value=t; RW.u.time.value=t; SELR.u.time.value=t;
@@ -1160,7 +1244,9 @@ function tick(ms){
   renderer.render(scene,camera);
   $("rose").setAttribute("transform",`rotate(${(-cam.yaw*180/Math.PI).toFixed(1)})`);
   placeDOM();
-  if(frameN%20===1)updateScale();
+  if(frameN%20===1){updateScale();$("zoom-level").textContent=(FITD/cam.d).toFixed(1)+"×";
+    $("flat-view").setAttribute("aria-pressed",String(goal.pitch>1.3));$("flat-view").textContent=goal.pitch>1.3?"Tilted view":"Top-down";
+    $("zoom-in").disabled=goal.d<=DMIN;$("zoom-out").disabled=goal.d>=DMAX;}
 }
 function updatePing(t){
   const period=720/U.pingSpeed.value;
@@ -1223,7 +1309,7 @@ function placeDOM(){
     if(g.n>1&&g.cnt.textContent!==String(g.n))g.cnt.textContent=g.n;
     g.el.style.transform=`translate3d(${g.sx.toFixed(1)}px,${g.sy.toFixed(1)}px,0) scale(${gs.toFixed(2)})`;
   }
-  const boxes=["title","tally","conn","horizon","card","legend","ctrl","log"].map(id=>$(id)).filter(el=>el.offsetWidth&&el.offsetHeight).map(el=>{const r=el.getBoundingClientRect();return [r.left-10,r.top-8,r.right+10,r.bottom+8];});
+  const boxes=["title","finder","tally","conn","horizon","card","legend","ctrl","navigation","log"].map(id=>$(id)).filter(el=>el.offsetWidth&&el.offsetHeight).map(el=>{const r=el.getBoundingClientRect();return [r.left-10,r.top-8,r.right+10,r.bottom+8];});
   GLY.filter(g=>g.vis).forEach(g=>boxes.push([g.sx-9,g.sy-18,g.sx+12,g.sy+2]));
   for(const l of LBL_ORDER){
     v3.set(sX(l.x),l.h||0,sZ(l.y)).project(camera);
@@ -1256,6 +1342,15 @@ async function boot(){
   U.fogColor.value=col3(ST.fog); U.pingSpeed.value=ST.pingSpeed;
   homeView(); Object.assign(cam,goal);
   await connect(); applyState(true); updateAmbient(); homeView(); Object.assign(cam,goal);
+  $("facility-search").addEventListener("input",()=>{touch();renderSearch();});
+  $("facility-search").addEventListener("keydown",e=>{if(e.key==="Escape"){clearSearch();e.target.blur();}if(e.key==="ArrowDown"){e.preventDefault();$("search-results").querySelector("button")?.focus();}if(e.key==="Enter"){e.preventDefault();$("search-results").querySelector("button")?.click();}});
+  $("search-results").addEventListener("keydown",e=>{const buttons=[...$("search-results").querySelectorAll("button")],i=buttons.indexOf(document.activeElement);if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();buttons[clamp(i+(e.key==="ArrowDown"?1:-1),0,buttons.length-1)]?.focus();}if(e.key==="Escape"){clearSearch();$("facility-search").focus();}});
+  $("search-clear").onclick=()=>{clearSearch();$("facility-search").focus();};
+  $("search-results").addEventListener("click",e=>{const b=e.target.closest("[data-search-id]");if(b){touch();select(SITEBY[b.dataset.searchId]);clearSearch();$("facility-search").blur();}});
+  $("zoom-in").onclick=()=>zoomAt(1/1.25);$("zoom-out").onclick=()=>zoomAt(1.25);
+  $("fit-territory").onclick=()=>{touch();closeCard();homeView();$("flat-view").setAttribute("aria-pressed","false");};
+  $("flat-view").onclick=()=>{touch();const flat=goal.pitch>1.3;goal.pitch=flat?ST.pitch*Math.PI/180:1.42;$("flat-view").setAttribute("aria-pressed",String(!flat));$("flat-view").textContent=flat?"Top-down":"Tilted view";};
+  $("toast-close").onclick=()=>$("toast").classList.remove("show");
   $("rank").onclick=()=>{touch();toggleMethod(true);};
   $("brief").onclick=()=>{lastInput=performance.now(); runBriefing();};
   $("drift").onclick=()=>{touch();toggleDrift();};
@@ -1263,7 +1358,7 @@ async function boot(){
   $("methodbtn").onclick=()=>{touch();toggleMethod();};
   $("present").onclick=()=>{touch();togglePresent();};
   $("method").addEventListener("click",e=>{if(e.target.id==="method")toggleMethod(false);});
-  $("horizon").addEventListener("click",e=>{if(e.target.closest("#horizon-toggle")){touch();$("horizon").classList.toggle("compact");renderHorizon();homeView();return;}const b=e.target.closest("[data-id]"); if(b&&SITEBY[b.dataset.id]){touch();select(SITEBY[b.dataset.id]);}});
+  $("horizon").addEventListener("click",e=>{if(e.target.closest("#horizon-toggle")){touch();$("horizon").classList.toggle("compact");renderHorizon();homeView();return;}const action=e.target.closest("[data-notice]");if(action){actOnNotice(action.dataset.notice,action.dataset.act,action);return;}const mode=e.target.closest("[data-notice-view]");if(mode){NOTICES=mode.dataset.noticeView;renderHorizon();return;}const unplaced=e.target.closest("[data-unplaced]");if(unplaced){toast("Unplaced notification",sigById(unplaced.dataset.unplaced)?.headline,"No facility location is linked to this signal yet.");return;}const b=e.target.closest("[data-id]"); if(b&&SITEBY[b.dataset.id]){touch();select(SITEBY[b.dataset.id]);}});
   if(API.live){ setInterval(refresh,120000);
     document.addEventListener("visibilitychange",()=>{if(!document.hidden)refresh();}); }
   if(HASH.includes("present"))togglePresent(true);

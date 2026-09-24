@@ -10,6 +10,7 @@ from http.server import ThreadingHTTPServer
 from helpers import entity, tempdir
 import serve
 from wartable import store
+from wartable.signals import seed_from_registry
 
 
 class ServerTests(unittest.TestCase):
@@ -93,6 +94,25 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(out["state"]["statuses"]["S-1"]["value"], "not_a_fit")
         self.assertEqual(self.req("POST", "/api/logbook", body={"action": "surveyed", "entity_id": "S-1"})[0], 409)
         self.assertEqual(self.req("POST", "/api/ledger", body={"change": "reinstate", "entity_id": "S-1", "reason": "was wrong"})[0], 201)
+
+    def test_notification_dismissal_and_restore_persist_without_changing_facility_or_score(self):
+        signal = seed_from_registry([entity("S-2", timing="proposed")])[0]
+        store.append("signals", signal, self.dir)
+        sources_before = store.read("signals", self.dir)
+        state_before = self.app.state()
+        for action, expected in (("signal_dismissed", "dismissed"), ("signal_pinned", "pinned")):
+            code, out = self.req("POST", "/api/logbook", body={"action": action, "signal_id": signal["id"]})
+            self.assertEqual(code, 201)
+            # A fresh App replays the files, as a reload/restart would.
+            state = serve.App(dist=self.dir, data_dir=self.dir).state()
+            displayed = next(s for s in state["signals"] if s["id"] == signal["id"])
+            self.assertEqual(displayed["triage"], expected)
+            self.assertEqual(state["statuses"], state_before["statuses"])
+            self.assertEqual(state["stages"], state_before["stages"])
+            self.assertEqual(state["progression"]["points"], state_before["progression"]["points"])
+        self.assertEqual(store.read("signals", self.dir), sources_before)
+        actions = [e["action"] for e in store.read("logbook", self.dir) if e.get("signal_id") == signal["id"]]
+        self.assertEqual(actions, ["signal_dismissed", "signal_pinned"])
 
     def test_add_entity_is_not_available_from_the_dashboard(self):
         self.assertEqual(self.req("POST", "/api/ledger", body={"change": "add_entity", "entity_id": "Z-1", "reason": "test"})[0], 400)
